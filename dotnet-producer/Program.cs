@@ -1,5 +1,6 @@
 ﻿using Confluent.Kafka;
 using System;
+using System.Text.Json;
 using System.Threading;
 
 namespace dotnet_producer
@@ -17,16 +18,20 @@ namespace dotnet_producer
 
             while (true)
             {
-                var username = Faker.Name.First(); ;
-
-                Console.WriteLine($"Creating user {username}");
-
-                producer.Produce("users-string", new Message<Null, string>()
+                var user = new User()
                 {
-                    Value = username
+                    FirstName = Faker.Name.First(),
+                    LastName = Faker.Name.Last()
+                };
+
+                Console.WriteLine($"Creating user {user.FirstName}");
+
+                producer.Produce("users-json", new Message<Null, string>()
+                {
+                    Value = JsonSerializer.Serialize(user)
                 });
 
-                Thread.Sleep(100);
+                Thread.Sleep(1000);
             }
         }
     }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text.Json;
 using Confluent.Kafka;
 
 namespace dotnet_consumer
@@ -16,12 +17,13 @@ namespace dotnet_consumer
 
             using (var consumer = new ConsumerBuilder<Null, string>(config).Build()) {
 
-                consumer.Subscribe("users-string");
+                consumer.Subscribe("users-json");
 
                 while (true)
                 {
                     var consumeResult = consumer.Consume();
-                    Console.WriteLine($"Received User: {consumeResult.Message.Value}");
+                    var user = JsonSerializer.Deserialize<User>(consumeResult.Message.Value);
+                    Console.WriteLine($"Received User: Firstname:{user.FirstName} Lastname:{user.LastName}");
                 }            
             }
         }
