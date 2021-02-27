@@ -35,7 +35,7 @@ namespace dotnet_consumer
                     {
                         var consumeResult = consumer.Consume();
                         var user = consumeResult.Message.Value;
-                        Console.WriteLine($"Received User: Firstname:{user.firstname} Lastname:{user.lastname}");
+                        Console.WriteLine($"Received User: Firstname:{user.firstname} Lastname:{user.lastname} Email:{user.email}");
                     }
                 }
             }

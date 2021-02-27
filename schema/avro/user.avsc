@@ -11,6 +11,10 @@
         {
             "name": "lastname",
             "type": "string"
+        },
+        {
+            "name": "email",
+            "type": "string"
         }
     ]
 }

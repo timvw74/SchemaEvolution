@@ -1,8 +1,7 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <PackageId>Timvw.Avro</PackageId>
-    <Version>1.0.1</Version>
     <PackageTags>Avro objects</PackageTags>
     <Description>
       This library contains the C# AVRO objects required for my App

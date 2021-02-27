@@ -30,8 +30,9 @@ namespace dotnet_producer
             {
                 var user = new user()
                 {
-                    firstname = Faker.Name.First(),
-                    lastname = Faker.Name.Last()
+                    firstname = Faker.Name.FirstName(),
+                    lastname = Faker.Name.LastName(),
+                    email = Faker.User.Email()
                 };
 
                 Console.WriteLine($"Creating user {user.firstname}");
