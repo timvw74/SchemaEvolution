@@ -1,6 +1,9 @@
 ﻿using System;
-using System.Text.Json;
 using Confluent.Kafka;
+using Confluent.Kafka.SyncOverAsync;
+using Confluent.SchemaRegistry;
+using Confluent.SchemaRegistry.Serdes;
+using timvw.avro;
 
 namespace dotnet_consumer
 {
@@ -11,20 +14,30 @@ namespace dotnet_consumer
             var config = new ConsumerConfig()
             {
                 BootstrapServers = "localhost:9092",
-                GroupId = "dotnet-users-string",
+                GroupId = "dotnet-users-avro",
                 AutoOffsetReset = AutoOffsetReset.Earliest
             };
 
-            using (var consumer = new ConsumerBuilder<Null, string>(config).Build()) {
+            var schemaRegistryConfig = new SchemaRegistryConfig
+            {
+                Url = "localhost:8081"
+            };
 
-                consumer.Subscribe("users-json");
-
-                while (true)
+            using (var schemaRegistry = new CachedSchemaRegistryClient(schemaRegistryConfig))
+            {
+                using (var consumer = new ConsumerBuilder<Null, user>(config)
+                    .SetValueDeserializer(new AvroDeserializer<user>(schemaRegistry).AsSyncOverAsync())
+                    .Build())
                 {
-                    var consumeResult = consumer.Consume();
-                    var user = JsonSerializer.Deserialize<User>(consumeResult.Message.Value);
-                    Console.WriteLine($"Received User: Firstname:{user.FirstName} Lastname:{user.LastName}");
-                }            
+                    consumer.Subscribe("users-avro");
+
+                    while (true)
+                    {
+                        var consumeResult = consumer.Consume();
+                        var user = consumeResult.Message.Value;
+                        Console.WriteLine($"Received User: Firstname:{user.firstname} Lastname:{user.lastname}");
+                    }
+                }
             }
         }
     }

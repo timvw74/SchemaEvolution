@@ -1,0 +1,16 @@
+{
+    
+    "namespace": "timvw.avro",
+    "type": "record",
+    "name": "user",
+    "fields": [
+        {
+            "name": "firstname",
+            "type": "string"
+        },
+        {
+            "name": "lastname",
+            "type": "string"
+        }
+    ]
+}
